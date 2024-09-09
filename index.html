@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Form Validation Lab</title>
+    <style>
+        @import 'https://fonts.googleapis.com/css?family=Montserrat%7CRaleway%7CSource+Code+Pro';
+
+        body {
+            font-family: 'Raleway', sans-serif;
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .container {
+            max-width: 1024px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h2>Form Validation Lab</h2>
+        </header>
+        <article>
+            <form id="validationForm" method="post" action="/validate">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name"><br><br>
+
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email"><br><br>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password"><br><br>
+
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age"><br><br>
+
+                <input type="submit" value="Submit">
+            </form>
+        </article>
+        <section id="messages"></section>
+    </div>
+    <footer>
+        Shahed Ahmed <br>
+        Z23696104
+    </footer>
+    <script>
+        // form event handler
+        document.getElementById('validationForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            // collect form data
+            const formData = new FormData(this);
+            // convert the data to plain object
+            const formDataObject = {};
+            formData.forEach((value, key) => formDataObject[key] = value);
+
+            fetch('/validate', {
+                method: 'POST',
+                // telling what kind of data is being send
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // send data as json string
+                body: JSON.stringify(formDataObject)
+            })
+                // receive as response as json
+                .then(response => response.json())
+                // 
+                .then(data => {
+                    const messages = document.getElementById('messages');
+                    messages.innerHTML = ''; // Clear previous messages
+                    // if success return paragraph with success class and content
+                    if (data.success) {
+                        messages.innerHTML = "<p class='success'>Validation successful. Form data is valid.</p>";
+                        // if not success 
+                    } else {
+                        //create paragraph element
+                        // add class error
+                        // add the content to the paragraph
+                        // append the paragraph to the messages element Id
+                        data.errors.forEach(error => {
+                            const errorElement = document.createElement('p');
+                            errorElement.classList.add('error');
+                            errorElement.textContent = error;
+                            messages.appendChild(errorElement);
+                        });
+                    }
+                })
+                // handle error
+                .catch(error => {
+                    console.error("Request failed", error);
+                });
+        });
+    </script>
+</body>
+
+</html>
