@@ -42,7 +42,7 @@ Negative age causes error:
 ![image](https://github.com/user-attachments/assets/61a0ef98-5be9-414c-ba80-d03e7096cdce)
 
 
-
+https://project6-p2-shahedahmed2023.fly.dev
 
 
 Explaining a scenario: When the user Enters name, password, and email click submit. after submission, the data is converted to a normal project. Using fetch to send the data as JSON string. when the server receives it. Then it validates the data and sends a json response. then fetch and read the response as json and show the context in the message-id tag. 
